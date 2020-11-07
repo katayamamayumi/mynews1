@@ -1,5 +1,3 @@
-
-
 @extends('layouts.profile')
 
 @section('title', 'MY プロフィール')
