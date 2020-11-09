@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Profiles;
+use App\Profile;
+use App\History;
+use App\Profilehistory;
+use Carbon\Carbon;
 
 class ProfileController extends Controller
 {
@@ -15,17 +18,17 @@ class ProfileController extends Controller
 
   public function create(Request $request)
   {
-    $this->validate($request, Profiles::$rules);
+    $this->validate($request, Profile::$rules);
 
-    $news = new Profiles;
+    $profile = new Profile;
     $form = $request->all();
 
 
     unset($form['_token']);
 
     // データベースに保存する
-    $news->fill($form);
-    $news->save();
+    $profile->fill($form);
+    $profile->save();
 
     // admin/     /createにリダイレクトする
     return redirect('admin/profile/create');
@@ -34,40 +37,45 @@ class ProfileController extends Controller
   {
     $cond_title = $request->cond_title;
     if ($cond_title != '') {
-      $posts = Profiles::where('title', $cond_title)->get();
+      $posts = Profile::where('title', $cond_title)->get();
     } else {
-      $posts = Profiles::all();
+      $posts = Profile::all();
     }
     return view('admin.profile.index', ['posts' => $posts, 'cond_title' => $cond_title]);
   }
   public function edit(Request $request)
   {
-    $news = Profiles::find($request->id);
-    if (empty($news)) {
+    $profile = Profile::find($request->id);
+    if (empty($profile)) {
       abort(404);
     }
-    return view('admin.profile.edit', ['news_form' => $news]);
+    return view('admin.profile.edit', ['profile_form' => $profile]);
   }
 
 
   public function update(Request $request)
   {
-    $this->validate($request, Profiles::$rules);
-    $news = Profiles::find($request->id);
-    $news_form = $request->all();
+    $this->validate($request, Profile::$rules);
+    $profile = Profile::find($request->id);
+    $profile_form = $request->all();
 
-    unset($news_form['imaage']);
-    unset($news_form['remove']);
-    unset($news_form['_token']);
+    unset($profile_form['imaage']);
+    unset($profile_form['remove']);
+    unset($profile_form['_token']);
 
-    $news->fill($news_form)->save();
+    $profile->fill($profile_form)->save();
 
-    return redirect('admin/profile');
+    $history = new Profilehistory;
+    $history->profile_id = $profile->id;
+    $history->edited_at = Carbon::now();
+    $history->save();
+
+    return redirect('admin/news/');
   }
   public function delete(Request $request)
   {
-    $news = Profiles::find($request->id);
-    $news->delete();
+    $profile = Profile::find($request->id);
+    $profile->delete();
     return redirect('admin/profile/');
   }
   //return redirect('admin/profile/edit');
