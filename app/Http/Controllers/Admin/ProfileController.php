@@ -59,7 +59,6 @@ class ProfileController extends Controller
     $profile = Profile::find($request->id);
     $profile_form = $request->all();
 
-    unset($profile_form['imaage']);
     unset($profile_form['remove']);
     unset($profile_form['_token']);
 
@@ -70,8 +69,9 @@ class ProfileController extends Controller
     $history->edited_at = Carbon::now();
     $history->save();
 
-    return redirect('admin/news/');
+    return redirect('admin/profile');
   }
+
   public function delete(Request $request)
   {
     $profile = Profile::find($request->id);

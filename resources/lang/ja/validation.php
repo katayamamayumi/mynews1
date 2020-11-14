@@ -141,7 +141,7 @@ return [
     |
     */
 
-    'aittrbutes' => [
+    'attributes' => [
         'title' => 'タイトル',
         'body' => '本文',
         'name' => '名前',
