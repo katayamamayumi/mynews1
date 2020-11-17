@@ -31,7 +31,7 @@
 <body>
     <div id="app">
         {{-- 画面上部に表示するナビゲーションバーです。 --}}
-        <nav class="navbar navbar-expand-md navbar-dark navbar-laravel">
+        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
