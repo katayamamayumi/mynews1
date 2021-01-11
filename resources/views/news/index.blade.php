@@ -2,7 +2,6 @@
 
 @section ('content')
 <div class="container">
-  <p>challenge heroku</p>
   <hr color="#c0c0c0">
   @if (!is_null($headline))
   <div class="row">
